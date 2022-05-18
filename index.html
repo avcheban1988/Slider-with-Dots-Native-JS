@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .slider {
+        margin-top: 150px;
+        position: relative;
+      }
+      .slider-title {
+        font-size: 32px;
+        color: blue;
+      }
+      .slider-title:after {
+        content: "";
+        display: block;
+        width: 10%;
+        height: 1px;
+        background-color: blue;
+        margin-top: 4px;
+      }
+      .slider .wrap {
+        width: 100%;
+        position: relative;
+      }
+      .slider .wrap .slider-item {
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 50px;
+        position: relative;
+      }
+      .slider .wrap .slider-item img {
+        width: 100%;
+      }
+      .slider .wrap .prev {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        width: 90px;
+        left: 10%;
+        background-color: rgba(0, 0, 0, 0);
+        transition: 0.3s;
+        height: 100%;
+      }
+      .slider .wrap .prev:hover {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .slider .wrap .prev:hover .arrow-left {
+        opacity: 1;
+      }
+      .slider .wrap .prev .arrow-left {
+        width: 30px;
+        height: 30px;
+        background: url(../icons/left-arrow.svg) center no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%);
+        opacity: 0.4;
+        transition: 1s;
+      }
+      .slider .wrap .next {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        width: 90px;
+        background-color: rgba(0, 0, 0, 0);
+        transition: 0.3s;
+        height: 100%;
+        right: 10%;
+      }
+      .slider .wrap .next:hover {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .slider .wrap .next:hover .arrow-right {
+        opacity: 1;
+      }
+      .slider .wrap .next .arrow-right {
+        width: 30px;
+        height: 30px;
+        background: url(../icons/right-arrow.svg) center no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%);
+        opacity: 0.4;
+        transition: 1s;
+      }
+      .slider-dots {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .slider-dots .dot {
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        margin: 0 10px;
+        background-color: blue;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+      }
+      .slider-dots .dot-active {
+        background-color: #000;
+        height: 18px;
+        width: 18px;
+      }
+      .fade {
+        -webkit-animation-name: fade;
+        animation-name: fade;
+        -webkit-animation-duration: 2.5s;
+        animation-duration: 2.5s;
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 2.5s;
+      }
+      @-webkit-keyframes fade {
+        from {
+          opacity: 0.1;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes fade {
+        from {
+          opacity: 0.1;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+
+    <div class="slider" id="photo">
+      <div class="wrap">
+        <div class="slider-item fade">
+          <img src="img/slider_1.jpg" alt="slider" />
+        </div>
+        <div class="slider-item fade">
+          <img src="img/slider_2.jpg" alt="slider" />
+        </div>
+        <div class="slider-item fade">
+          <img src="img/slider_3.jpg" alt="slider" />
+        </div>
+        <div class="slider-item fade">
+          <img src="img/slider_4.jpg" alt="slider" />
+        </div>
+
+        <div class="prev"><div class="arrow-left"></div></div>
+        <div class="next"><div class="arrow-right"></div></div>
+      </div>
+      <div class="slider-dots">
+        <div class="dot dot-active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <script>
+      let slideIndex = 1,
+        slides = document.querySelectorAll(".slider-item"),
+        prev = document.querySelector(".prev"),
+        next = document.querySelector(".next"),
+        dotsWrap = document.querySelector(".slider-dots"),
+        dot = document.querySelectorAll(".dot"),
+        onclickDot = 0;
+
+      function showSlides(n) {
+        //добавляем проверку на то, вдруг это первый или последний слайд
+        if (n > slides.length) {
+          slideIndex = 1; //если слайды закончились в карусели, то возвращаемся к первому
+        }
+        if (n < 1) {
+          slideIndex = slides.length; //если меньше единицы, то уходим на последний слайд в карусели
+        }
+
+        slides.forEach((item) => (item.style.display = "none")); //скрыли все слайды
+        dot.forEach((elem) => elem.classList.remove("dot-active")); //скрыли активные точки
+        slides[slideIndex - 1].style.display = "block"; //первый слайд показали
+        dot[slideIndex - 1].classList.add("dot-active"); //первая точка активная
+      }
+
+      showSlides(1); //показываем первый слайд и первую точки
+
+      function plusSlides(n) {
+        //функция увеличения индекса слайда
+        showSlides((slideIndex += n));
+      }
+
+      function currentSlide(n) {
+        showSlides(slideIndex == n);
+      }
+
+      prev.addEventListener("click", function () {
+        //вешаем на кнопки
+        plusSlides(-1);
+      });
+      next.addEventListener("click", function () {
+        plusSlides(1);
+      });
+
+      //dots
+
+      function clearDots() {
+        //функция, чтоб стереть все точки
+        dot.forEach((elem) => elem.classList.remove("dot-active"));
+      }
+
+      function makeActiveDots() {
+        dot.forEach(function (elem, index) {
+          //перебираем все точки
+          elem.addEventListener("click", (evt) => {
+            //по клику на точку
+            clearDots(); //стираем активыне точки
+            onclickDot = index; //получаем индекс кликнутой точки
+            dot[onclickDot].classList.add("dot-active"); //кликнутой точки задаем класс
+            slides.forEach((item) => (item.style.display = "none")); //прячем все слайды
+            slides[onclickDot].style.display = "block"; //слайду, который соответствует индексу точки, делаем дисплей БЛОК
+            slideIndex = onclickDot + 1; //меняем индекс слайда, для актуального номера, при нажатии на кнопки
+            console.log(onclickDot);
+          });
+        });
+      }
+      makeActiveDots();
+    </script>
+  </body>
+</html>
